@@ -160,6 +160,7 @@ Exclude surrogate keys from analysis. Net revenue includes negative returns. Do 
     output = REPORTS_DIR / f"report_{run_id}.html"
     summary = {"run_id": run_id, "intent": business_intent, "status": "preview" if fallback else "query_executed",
                "execution_mode": "offline_review" if response_source() == "review_fixture" else "live",
+               "rows_returned": len(result), "gold_tables": list(tables), "chart_specs": charts,
                "sql": executed_sql, "executive_answer": executive_answer(result, fallback),
                "unverified_model_narrative": draft, "data": json.loads(result.to_json(orient="records"))}
     output.write_text(render_html(result, business_intent, executed_sql, run_id, fallback, charts), encoding="utf-8")

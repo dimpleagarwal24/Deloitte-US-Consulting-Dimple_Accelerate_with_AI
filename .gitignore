@@ -49,3 +49,6 @@ chroma_db/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local reference copy, including its private configuration and run artifacts
+/AWA Session/

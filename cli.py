@@ -51,13 +51,15 @@ def hitl_gate(layer: str, sttm_path: str) -> bool:
             return False
         if answer in {"y", "yes"} and valid:
             return True
-        if answer in {"n", "no"}:
+        if answer in {"n", "no", "abort"}:
             return False
         if answer in {"e", "edit"}:
             try:
                 edit_sttm(sttm_path)
             except (OSError, subprocess.CalledProcessError):
                 print("Editor could not be opened. Edit the mapping file manually, then re-review.")
+            continue
+        print("Please type y, e, or n. Invalid mappings must be edited before approval.")
 
 
 def _checkpoint(state: PipelineState) -> None:

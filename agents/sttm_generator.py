@@ -56,7 +56,10 @@ def generate_mapping(layer: str, context: dict, business_intent: str, run_id: st
 
 
 def generate_bronze_sttm(profile_path: str, business_intent: str, run_id: str) -> str:
-    return generate_mapping("bronze", json.loads(Path(profile_path).read_text(encoding="utf-8")), business_intent, run_id)
+    context = json.loads(Path(profile_path).read_text(encoding="utf-8"))
+    for metadata in context["tables"].values():
+        metadata.pop("source_path", None)
+    return generate_mapping("bronze", context, business_intent, run_id)
 
 
 def _next_mapping(layer: str, paths: list[str], prior_path: str, business_intent: str, run_id: str) -> str:

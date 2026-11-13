@@ -74,12 +74,16 @@ model credentials. Ordinary tests and offline CLI execution need no network.
 
 Verified on Windows / Python 3.12.10 on 2026-11-13:
 
-- 119 tests passed; 91.19% combined line/branch coverage.
+- 131 tests passed; 91.28% combined line/branch coverage after the AWA comparison update.
 - All implementation files meet the 80% line coverage threshold.
 - Ruff lint and package consistency checks passed.
 - Dependency audit found no known vulnerabilities in the pinned package set.
 - Category and region totals reconcile against independent pandas calculations.
 - Four real subprocess scenarios verify all approval pauses and abort behavior.
+
+The AWA comparison and adopted features are documented in the root README.
+Retained evidence files describe the earlier offline run and remain byte-for-byte
+unchanged; current tests execute fresh scenarios in isolated temporary directories.
 
 Ubuntu is configured in CI but has not been run locally. Dependency advisory
 results can change over time. Live model response quality, endpoint access and

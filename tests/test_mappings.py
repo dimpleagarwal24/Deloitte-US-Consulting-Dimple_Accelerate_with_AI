@@ -75,6 +75,7 @@ def test_profile_flags_and_join_keys():
     catalog = pd.DataFrame({"product_id": ["P1", "P2"]})
     result = profiler.profile_tables({"sales": sales, "products": catalog}, "test")
     assert result["candidate_join_keys"] == {"product_id": ["sales", "products"]}
+    assert result["tables"]["sales"]["column_count"] == 3
     columns = result["tables"]["sales"]["columns"]
     assert "mixed_date_formats" in columns["transaction_date"]["quality_flags"]
     assert columns["amount"]["null_count"] == 1
@@ -86,6 +87,39 @@ def test_empty_profile_is_json_serializable():
     result = profiler.profile_tables({"empty": pd.DataFrame({"value": pd.Series(dtype=float)})}, "empty")
     json.dumps(result, allow_nan=False)
     assert result["tables"]["empty"]["columns"]["value"]["null_pct"] == 0
+
+
+@pytest.mark.parametrize("values,mixed", [
+    (["1/5/2024", "2024-1-6", None], True),
+    (["1-5-2024", "2024/1/6"], True),
+    (["1/5/2024", "01/06/2024"], False),
+    (["not a date", None], False),
+    ([None, None], False),
+])
+def test_profile_date_format_variants(values, mixed):
+    result = profiler.profile_tables({"sales": pd.DataFrame({"date": values})}, "test")
+    flags = result["tables"]["sales"]["columns"]["date"]["quality_flags"]
+    assert ("mixed_date_formats" in flags) is mixed
+
+
+def test_profile_detects_uppercase_id_suffix():
+    table = pd.DataFrame({"PRODUCT_ID": ["P1"]})
+    result = profiler.profile_tables({"sales": table, "products": table}, "test")
+    assert result["candidate_join_keys"] == {"PRODUCT_ID": ["sales", "products"]}
+
+
+def test_profile_records_source_and_output_lineage(monkeypatch):
+    monkeypatch.setattr(profiler.pd, "read_csv", Mock(return_value=pd.DataFrame({"amount": [1]})))
+    write = Mock()
+    monkeypatch.setattr(profiler.Path, "write_text", write)
+    audit = Mock()
+    monkeypatch.setattr(profiler, "AuditLogger", Mock(return_value=audit))
+    output = profiler.profile(["sales.csv"], "test")
+    saved = json.loads(write.call_args.args[0])
+    assert saved["tables"]["sales"]["source_path"] == "sales.csv"
+    assert saved["tables"]["sales"]["column_count"] == 1
+    audit.log.assert_called_once_with("profiler", "completed", tables=1,
+                                      input_files=["sales.csv"], output=output)
 
 
 def test_generator_validates_before_saving(monkeypatch):
@@ -103,3 +137,19 @@ def test_generator_validates_before_saving(monkeypatch):
     with pytest.raises(ValueError):
         sttm_generator.generate_mapping("bronze", {}, "Revenue", "test")
     assert save.call_count == 1
+
+
+@pytest.mark.parametrize("include_source_path", [True, False])
+def test_bronze_prompt_keeps_profile_paths_local(monkeypatch, include_source_path):
+    metadata = {"row_count": 1, "column_count": 1, "columns": {"amount": {"dtype": "float64"}}}
+    if include_source_path:
+        metadata["source_path"] = "private/input/sales.csv"
+    profile = {"tables": {"sales": metadata}}
+    monkeypatch.setattr(sttm_generator.Path, "read_text", Mock(return_value=json.dumps(profile)))
+    generate = Mock(return_value="mapping.csv")
+    monkeypatch.setattr(sttm_generator, "generate_mapping", generate)
+    assert sttm_generator.generate_bronze_sttm("profile.json", "Revenue", "test") == "mapping.csv"
+    sent = generate.call_args.args[1]["tables"]["sales"]
+    assert "source_path" not in sent
+    assert sent["column_count"] == 1
+    assert sent["columns"] == metadata["columns"]

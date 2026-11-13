@@ -30,7 +30,8 @@ def profile_tables(tables: dict[str, pd.DataFrame], run_id: str) -> dict:
                 "quality_flags": [],
             }
             if 0 < len(text) and not pd.api.types.is_numeric_dtype(values):
-                formats = [r"\d{2}/\d{2}/\d{4}", r"\d{4}-\d{2}-\d{2}", r"\d{2}-\d{2}-\d{4}"]
+                formats = [r"\d{1,2}/\d{1,2}/\d{4}", r"\d{4}-\d{1,2}-\d{1,2}",
+                           r"\d{1,2}-\d{1,2}-\d{4}", r"\d{4}/\d{1,2}/\d{1,2}"]
                 if sum(text.str.fullmatch(pattern).mean() > 0.1 for pattern in formats) > 1:
                     details["quality_flags"].append("mixed_date_formats")
                 if text.str.len().mean() < 6:
@@ -40,9 +41,10 @@ def profile_tables(tables: dict[str, pd.DataFrame], run_id: str) -> dict:
             if pd.api.types.is_numeric_dtype(values):
                 details.update(min=_number(values.min()), max=_number(values.max()), mean=_number(values.mean()))
             columns[column] = details
-            if column.endswith("_id"):
+            if column.lower().endswith("_id"):
                 candidates.setdefault(column, []).append(name)
-        summary = {"row_count": len(frame), "duplicate_rows": int(frame.duplicated().sum()), "columns": columns}
+        summary = {"row_count": len(frame), "column_count": len(frame.columns),
+                   "duplicate_rows": int(frame.duplicated().sum()), "columns": columns}
         if {"quantity", "unit_price", "total_amount"} <= set(frame.columns):
             numeric = frame[["quantity", "unit_price", "total_amount"]].apply(pd.to_numeric, errors="coerce")
             difference = numeric["quantity"] * numeric["unit_price"] - numeric["total_amount"]
@@ -61,7 +63,9 @@ def profile(file_paths: list[str], run_id: str) -> str:
             raise ValueError("Duplicate input table names")
         tables[name] = pd.read_csv(path, low_memory=False)
     result = profile_tables(tables, run_id)
+    for path in file_paths:
+        result["tables"][Path(path).stem]["source_path"] = str(Path(path))
     output = PROFILES_DIR / f"profile_combined_{run_id}.json"
     output.write_text(json.dumps(result, indent=2, allow_nan=False), encoding="utf-8")
-    AuditLogger(run_id).log("profiler", "completed", tables=len(tables))
+    AuditLogger(run_id).log("profiler", "completed", tables=len(tables), input_files=file_paths, output=str(output))
     return str(output)

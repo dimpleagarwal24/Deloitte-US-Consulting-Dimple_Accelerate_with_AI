@@ -60,8 +60,9 @@ or overwritten by this implementation; change an old Anthropic setting yourself.
 .\.venv\Scripts\python.exe cli.py --files products.csv sales_data.csv stores.csv --intent "Which product category generated the highest net sales revenue?"
 ```
 
-At each mapping gate, choose `y` to approve, `e` to edit and re-review, or `n` to
-abort. Set `EDITOR` to an editor command that waits for edits, such as `code --wait`,
+At each mapping gate, choose `y` to approve, `e` to edit and re-review, or `n`, `no`
+or `abort` to stop. Unrecognized responses display guidance. Set `EDITOR` to an
+editor command that waits for edits, such as `code --wait`,
 or use the Notepad fallback. Invalid mapping syntax cannot be approved. Semantic
 checks such as column existence and reference-key uniqueness also run during execution.
 An abort or failure returns exit code 1 and never executes an unapproved layer.
@@ -84,6 +85,13 @@ The three mappings are CSVs under `data/sttm/`. Parquet outputs are under
 Every artifact carries the same UTC timestamp plus random run suffix.
 Append-only JSONL events live in `audit_logs/`; a JSON state snapshot lives in
 `data/traces/`. These are diagnostic checkpoints, not automatic resume support.
+
+Profiles include row/column counts, source-path lineage, null and numeric statistics,
+duplicate counts, amount-quality checks and candidate join keys, including uppercase
+`_ID` suffixes. Date-format flags recognize single-digit months/days and year-first
+slash forms; detection is advisory and does not expand the accepted casting formats.
+Source paths are retained in the local profile and profiler audit, but that metadata
+field is removed before constructing the Bronze model prompt.
 
 There are four application-level LLM requests on a successful live run: three mapping
 requests and one reporter request. SDK retries are disabled. Credential checks,
@@ -167,6 +175,9 @@ The visible executive summary is computed from executed results. The model's
 unverified prose is retained only as `unverified_model_narrative` in the JSON
 summary. Negative-value pie charts become bars. HTML text is escaped and Plotly is
 embedded locally. Check JSON `status` to distinguish `query_executed` from `preview`.
+The JSON also records `rows_returned`, `gold_tables` and requested `chart_specs`.
+Chart specifications are model proposals: rendering still validates them and may
+replace invalid specifications or negative-value pies with a safe default/bar chart.
 
 In live mode, raw CSVs stay local, but column profiles, sample/distinct values, prior mappings,
 business intent and up to 50 rows per Gold table are sent to GitHub Models. Use only
@@ -175,6 +186,36 @@ or raw provider errors. Normal generated artifacts can contain sensitive busines
 data and are ignored by Git. The explicitly retained offline sample under
 `review/evidence/` is intended for code review and contains only the supplied
 training data. Do not add private datasets or real-run credentials to that folder.
+
+## AWA Session comparison
+
+The supplied local AWA Session reference was reviewed on 2026-11-13. This project
+is the stronger fit for the approved review criteria and revenue policy, rather
+than a claim that it supports every feature in the reference.
+
+| Area | AWA reference | This project |
+| --- | --- | --- |
+| Bronze fidelity | Coerces failed casts to null; can skip missing rules | Explicit date formats, null preservation, full-column coverage, invalid casts fail |
+| Silver quality | Can silently skip rules; fills monetary fields without a policy guard | Validated rules, canonical lookups, monetary protections, business-row deduplication |
+| Gold joins | No reference-key uniqueness check | Rejects duplicate reference keys that could multiply revenue |
+| Report execution | Executes model SQL directly; fallback can retain an unrelated narrative | Restricted SQL, disabled external access, grounded summary and labelled preview |
+| Approvals | Blocking gates, but no mapping-operation validation at approval | Blocking gates plus mapping validation, checkpoints and approval hashes |
+| Review evidence | No test suite or CI configuration found in the supplied copy | Hermetic tests, isolated integration tests, CI and explicit offline evidence |
+| Providers | GitHub, Groq and Anthropic | GitHub only, as approved; no implicit retries or silent provider fallback |
+
+Two isolated, in-memory checks reproduced reference risks: casting
+`01/15/2024` and `2024-01-17` together lost one valid date, and joining a revenue-10
+transaction to two matching reference rows yielded revenue 20. No reference
+credentials, configuration or live pipeline were loaded for these checks.
+
+Useful reference features adopted here are clearer approval input handling,
+column counts and source/output lineage, broader date-format and ID-suffix
+profiling, and richer report JSON metadata. Regression tests cover the additions.
+Multi-provider routing, raw model-response trace files, permissive rule aliases,
+and projection-only Gold outputs were not added: they are outside the approved
+scope or would weaken the explicit contract. The local `AWA Session/` copy is
+ignored by Git and remains unchanged. Existing retained evidence is historical;
+its files and hashes were not rewritten for these additive changes.
 
 ## Tests and CI
 
@@ -199,16 +240,18 @@ pytest command. Choose a new directory each time; existing evidence is never
 overwritten. Without that option, test outputs remain in temporary directories.
 Dependency auditing uses a vulnerability advisory service, not a model API.
 
-The workflow in `.github/workflows/tests.yml` is a template for making this folder
-the repository root. It runs lint, tests, coverage gates, dependency consistency and
+The workflow in `.github/workflows/tests.yml` uses this project as the repository
+root. It runs lint, tests, coverage gates, dependency consistency and
 vulnerability checks on Windows and Ubuntu with Python 3.12, then uploads offline
 evidence and coverage results as CI artifacts. Tests and evidence need no API keys.
-No Git repository or hosted CI run has been created here. If this folder is placed
-inside a larger repository, move the workflow to its root `.github/workflows/` and
+Hosted run status is available in the repository's GitHub Actions tab. If this folder
+is placed inside a larger repository, move the workflow to its root `.github/workflows/` and
 set the working directory and artifact paths to this project before submitting.
 
 ## Current limits and release notes
 
+- AWA comparison update: approval-input guidance, profiler lineage and date/ID
+    detection improvements, report metadata, and regression tests; reference files unchanged.
 - Pre-key review update: explicit offline fixtures, retained datasets and manifests,
   genuine blocking CLI tests, mapping approval hashes, lint and dependency audit gates.
 - Initial release: CLI, four-request model flow, three approval gates, all three

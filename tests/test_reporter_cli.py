@@ -1,3 +1,4 @@
+import json
 from unittest.mock import Mock
 
 import pandas as pd
@@ -48,6 +49,25 @@ def test_bad_chart_json_uses_default():
     assert reporter.parse_response("SQL:\nSELECT * FROM sales_gold\nNARRATIVE:\nDraft\nCHARTS:\ninvalid")[2] == []
 
 
+def test_report_json_retains_reproduction_metadata(monkeypatch):
+    frame = pd.DataFrame({"category": ["Electronics"], "revenue": [100]})
+    charts = [{"type": "bar", "x": "category", "y": "revenue", "title": "Revenue"}]
+    monkeypatch.setattr(reporter, "load_tables", Mock(return_value={"sales_gold": frame}))
+    monkeypatch.setattr(reporter, "call_llm", Mock(return_value=
+                        'SQL:\nSELECT * FROM sales_gold\nNARRATIVE:\nDraft\nCHARTS:\n' + json.dumps(charts)))
+    monkeypatch.setattr(reporter, "render_html", Mock(return_value="<html></html>"))
+    monkeypatch.setattr(reporter, "AuditLogger", Mock())
+    write = Mock()
+    monkeypatch.setattr(type(reporter.REPORTS_DIR), "write_text", write)
+    reporter.generate_report(["sales_gold_test.parquet"], "Revenue", "test")
+    summary = json.loads(write.call_args_list[1].args[0])
+    assert summary["rows_returned"] == 1
+    assert summary["gold_tables"] == ["sales_gold"]
+    assert summary["chart_specs"] == charts
+    assert summary["unverified_model_narrative"] == "Draft"
+    assert summary["data"] == frame.to_dict("records")
+
+
 def test_report_escapes_content_and_handles_negative_pie():
     result = pd.DataFrame({"category": ["<script>alert(1)</script>", "Sports"], "total_revenue": [100, -20]})
     page = reporter.render_html(result, '<img src=x onerror="alert(1)">', "SELECT * FROM sales_gold", "test", False,
@@ -58,7 +78,7 @@ def test_report_escapes_content_and_handles_negative_pie():
     assert '"type":"bar"' in page
 
 
-def test_gate_reprompts_and_revalidates_after_edit(monkeypatch):
+def test_gate_reprompts_and_revalidates_after_edit(monkeypatch, capsys):
     actions = iter(["invalid", "e", "y"])
     monkeypatch.setattr("builtins.input", lambda _: next(actions))
     display = Mock()
@@ -68,11 +88,12 @@ def test_gate_reprompts_and_revalidates_after_edit(monkeypatch):
     assert cli.hitl_gate("bronze", "mapping.csv")
     assert display.call_count == 3
     editor.assert_called_once_with("mapping.csv")
+    assert "Please type y, e, or n" in capsys.readouterr().out
 
 
-@pytest.mark.parametrize("answer", ["n", "no"])
+@pytest.mark.parametrize("answer", ["n", "no", "abort", " ABORT "])
 def test_gate_abort(monkeypatch, answer):
-    monkeypatch.setattr("builtins.input", lambda _: answer)
+    monkeypatch.setattr("builtins.input", Mock(side_effect=[answer]))
     monkeypatch.setattr(cli, "display_sttm", Mock())
     assert not cli.hitl_gate("silver", "mapping.csv")
 
