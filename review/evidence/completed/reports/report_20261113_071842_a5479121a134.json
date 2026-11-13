@@ -1,0 +1,31 @@
+{
+  "run_id": "20261113_071842_a5479121a134",
+  "intent": "Which product category generated the highest net sales revenue?",
+  "status": "query_executed",
+  "execution_mode": "offline_review",
+  "sql": "SELECT category, total_revenue FROM revenue_gold ORDER BY total_revenue DESC LIMIT 500",
+  "executive_answer": "The executed query returned 5 row(s). Highest total_revenue: 126,502.54. category=Electronics.",
+  "unverified_model_narrative": "This is a hand-authored offline review response, not a live model result. The application computes the visible executive answer from executed query results.",
+  "data": [
+    {
+      "category": "Electronics",
+      "total_revenue": 126502.54
+    },
+    {
+      "category": "Beauty",
+      "total_revenue": 27587.05
+    },
+    {
+      "category": "Home & Kitchen",
+      "total_revenue": 22381.94
+    },
+    {
+      "category": "Apparel",
+      "total_revenue": 14496.05
+    },
+    {
+      "category": "Sports",
+      "total_revenue": 13018.15
+    }
+  ]
+}

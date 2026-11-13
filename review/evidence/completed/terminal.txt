@@ -1,0 +1,90 @@
+AUTOMATED OFFLINE REVIEW; INPUTS PROVIDED BY TEST HARNESS, NOT A HUMAN
+
+=== OFFLINE REVIEW: fixture responses, no API requests; approvals are still required ===
+
+=== Profile | run 20261113_071842_a5479121a134 ===
+
+=== Review Bronze mapping ===
+╭─────────────────┬────────────────┬──────────────────┬─────────────────┬───────────────────┬──────────────────┬───────────────────────┬────────────────────────╮
+│ source_schema   │ source_table   │ source_column    │ target_schema   │ target_table      │ target_column    │ transformation_type   │ transformation_logic   │
+├─────────────────┼────────────────┼──────────────────┼─────────────────┼───────────────────┼──────────────────┼───────────────────────┼────────────────────────┤
+│ landing         │ sales_data     │ transaction_id   │ bronze          │ sales_data_bronze │ transaction_id   │ type_cast             │ str                    │
+│ landing         │ sales_data     │ transaction_date │ bronze          │ sales_data_bronze │ transaction_date │ type_cast             │ datetime               │
+│ landing         │ sales_data     │ store_id         │ bronze          │ sales_data_bronze │ store_id         │ type_cast             │ str                    │
+│ landing         │ sales_data     │ product_id       │ bronze          │ sales_data_bronze │ product_id       │ type_cast             │ str                    │
+│ landing         │ sales_data     │ product_name     │ bronze          │ sales_data_bronze │ product_name     │ type_cast             │ str                    │
+│ landing         │ sales_data     │ category         │ bronze          │ sales_data_bronze │ category         │ type_cast             │ str                    │
+│ landing         │ sales_data     │ quantity         │ bronze          │ sales_data_bronze │ quantity         │ type_cast             │ int                    │
+│ landing         │ sales_data     │ unit_price       │ bronze          │ sales_data_bronze │ unit_price       │ type_cast             │ float                  │
+│ landing         │ sales_data     │ total_amount     │ bronze          │ sales_data_bronze │ total_amount     │ type_cast             │ float                  │
+│ landing         │ sales_data     │ customer_segment │ bronze          │ sales_data_bronze │ customer_segment │ type_cast             │ str                    │
+│ landing         │ sales_data     │ payment_method   │ bronze          │ sales_data_bronze │ payment_method   │ type_cast             │ str                    │
+│ landing         │ sales_data     │ *                │ bronze          │ sales_data_bronze │ _load_timestamp  │ metadata_inject       │                        │
+│ landing         │ sales_data     │ *                │ bronze          │ sales_data_bronze │ _source_file     │ metadata_inject       │                        │
+│ landing         │ products       │ product_id       │ bronze          │ products_bronze   │ product_id       │ type_cast             │ str                    │
+│ landing         │ products       │ product_name     │ bronze          │ products_bronze   │ product_name     │ type_cast             │ str                    │
+│ landing         │ products       │ category         │ bronze          │ products_bronze   │ category         │ type_cast             │ str                    │
+│ landing         │ products       │ standard_price   │ bronze          │ products_bronze   │ standard_price   │ type_cast             │ float                  │
+│ landing         │ products       │ *                │ bronze          │ products_bronze   │ _load_timestamp  │ metadata_inject       │                        │
+│ landing         │ products       │ *                │ bronze          │ products_bronze   │ _source_file     │ metadata_inject       │                        │
+│ landing         │ stores         │ store_id         │ bronze          │ stores_bronze     │ store_id         │ type_cast             │ str                    │
+│ landing         │ stores         │ store_name       │ bronze          │ stores_bronze     │ store_name       │ type_cast             │ str                    │
+│ landing         │ stores         │ region           │ bronze          │ stores_bronze     │ region           │ type_cast             │ str                    │
+│ landing         │ stores         │ city             │ bronze          │ stores_bronze     │ city             │ type_cast             │ str                    │
+│ landing         │ stores         │ state            │ bronze          │ stores_bronze     │ state            │ type_cast             │ str                    │
+│ landing         │ stores         │ *                │ bronze          │ stores_bronze     │ _load_timestamp  │ metadata_inject       │                        │
+│ landing         │ stores         │ *                │ bronze          │ stores_bronze     │ _source_file     │ metadata_inject       │                        │
+╰─────────────────┴────────────────┴──────────────────┴─────────────────┴───────────────────┴──────────────────┴───────────────────────┴────────────────────────╯
+
+Mapping: C:\src\Accelerate with AI\Oct_29th_2026_HYD\medallion-pipeline\review\evidence\completed\data\sttm\sttm_bronze_20261113_071842_a5479121a134.csv
+[y]es / [e]dit then re-review / [n]o abort > 
+=== Review Silver mapping ===
+╭─────────────────┬───────────────────┬──────────────────┬─────────────────┬───────────────────┬──────────────────┬───────────────────────┬────────────────────────────────────────────────────╮
+│ source_schema   │ source_table      │ source_column    │ target_schema   │ target_table      │ target_column    │ transformation_type   │ transformation_logic                               │
+├─────────────────┼───────────────────┼──────────────────┼─────────────────┼───────────────────┼──────────────────┼───────────────────────┼────────────────────────────────────────────────────┤
+│ bronze          │ sales_data_bronze │ transaction_id   │ silver          │ sales_data_silver │ transaction_id   │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ transaction_date │ silver          │ sales_data_silver │ transaction_date │ normalize             │ date                                               │
+│ bronze          │ sales_data_bronze │ store_id         │ silver          │ sales_data_silver │ store_id         │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ product_id       │ silver          │ sales_data_silver │ product_id       │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ product_name     │ silver          │ sales_data_silver │ product_name     │ lookup                │ products_bronze:product_id:product_name            │
+│ bronze          │ sales_data_bronze │ category         │ silver          │ sales_data_silver │ category         │ lookup                │ products_bronze:product_id:category                │
+│ bronze          │ sales_data_bronze │ quantity         │ silver          │ sales_data_silver │ quantity         │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ unit_price       │ silver          │ sales_data_silver │ unit_price       │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ total_amount     │ silver          │ sales_data_silver │ total_amount     │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ customer_segment │ silver          │ sales_data_silver │ customer_segment │ map_values            │ {"Prem":"Premium","Std":"Standard","Bgt":"Budget"} │
+│ bronze          │ sales_data_bronze │ payment_method   │ silver          │ sales_data_silver │ payment_method   │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ _load_timestamp  │ silver          │ sales_data_silver │ _load_timestamp  │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ _source_file     │ silver          │ sales_data_silver │ _source_file     │ passthrough           │                                                    │
+│ bronze          │ sales_data_bronze │ *                │ silver          │ sales_data_silver │ *                │ deduplicate           │ *                                                  │
+│ bronze          │ products_bronze   │ product_id       │ silver          │ products_silver   │ product_id       │ passthrough           │                                                    │
+│ bronze          │ products_bronze   │ product_name     │ silver          │ products_silver   │ product_name     │ passthrough           │                                                    │
+│ bronze          │ products_bronze   │ category         │ silver          │ products_silver   │ category         │ passthrough           │                                                    │
+│ bronze          │ products_bronze   │ standard_price   │ silver          │ products_silver   │ standard_price   │ passthrough           │                                                    │
+│ bronze          │ products_bronze   │ _load_timestamp  │ silver          │ products_silver   │ _load_timestamp  │ passthrough           │                                                    │
+│ bronze          │ products_bronze   │ _source_file     │ silver          │ products_silver   │ _source_file     │ passthrough           │                                                    │
+│ bronze          │ products_bronze   │ *                │ silver          │ products_silver   │ *                │ deduplicate           │ *                                                  │
+│ bronze          │ stores_bronze     │ store_id         │ silver          │ stores_silver     │ store_id         │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ store_name       │ silver          │ stores_silver     │ store_name       │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ region           │ silver          │ stores_silver     │ region           │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ city             │ silver          │ stores_silver     │ city             │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ state            │ silver          │ stores_silver     │ state            │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ _load_timestamp  │ silver          │ stores_silver     │ _load_timestamp  │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ _source_file     │ silver          │ stores_silver     │ _source_file     │ passthrough           │                                                    │
+│ bronze          │ stores_bronze     │ *                │ silver          │ stores_silver     │ *                │ deduplicate           │ *                                                  │
+╰─────────────────┴───────────────────┴──────────────────┴─────────────────┴───────────────────┴──────────────────┴───────────────────────┴────────────────────────────────────────────────────╯
+
+Mapping: C:\src\Accelerate with AI\Oct_29th_2026_HYD\medallion-pipeline\review\evidence\completed\data\sttm\sttm_silver_20261113_071842_a5479121a134.csv
+[y]es / [e]dit then re-review / [n]o abort > 
+=== Review Gold mapping ===
+╭─────────────────┬───────────────────┬─────────────────┬─────────────────┬────────────────┬─────────────────┬───────────────────────┬────────────────────────────────────╮
+│ source_schema   │ source_table      │ source_column   │ target_schema   │ target_table   │ target_column   │ transformation_type   │ transformation_logic               │
+├─────────────────┼───────────────────┼─────────────────┼─────────────────┼────────────────┼─────────────────┼───────────────────────┼────────────────────────────────────┤
+│ silver          │ sales_data_silver │ category        │ gold            │ revenue_gold   │ category        │ group_by              │                                    │
+│ silver          │ sales_data_silver │ total_amount    │ gold            │ revenue_gold   │ total_revenue   │ aggregate             │ SUM(total_amount) AS total_revenue │
+╰─────────────────┴───────────────────┴─────────────────┴─────────────────┴────────────────┴─────────────────┴───────────────────────┴────────────────────────────────────╯
+
+Mapping: C:\src\Accelerate with AI\Oct_29th_2026_HYD\medallion-pipeline\review\evidence\completed\data\sttm\sttm_gold_20261113_071842_a5479121a134.csv
+[y]es / [e]dit then re-review / [n]o abort > 
+=== Complete ===
+Report: C:\src\Accelerate with AI\Oct_29th_2026_HYD\medallion-pipeline\review\evidence\completed\reports\report_20261113_071842_a5479121a134.html
+Audit: C:\src\Accelerate with AI\Oct_29th_2026_HYD\medallion-pipeline\review\evidence\completed\audit_logs\20261113_071842_a5479121a134.jsonl

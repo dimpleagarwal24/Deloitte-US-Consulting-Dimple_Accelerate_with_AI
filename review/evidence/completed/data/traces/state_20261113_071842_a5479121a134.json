@@ -1,0 +1,29 @@
+{
+  "run_id": "20261113_071842_a5479121a134",
+  "business_intent": "Which product category generated the highest net sales revenue?",
+  "input_files": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\landing\\20261113_071842_a5479121a134\\sales_data.csv",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\landing\\20261113_071842_a5479121a134\\products.csv",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\landing\\20261113_071842_a5479121a134\\stores.csv"
+  ],
+  "profile_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\profiles\\profile_combined_20261113_071842_a5479121a134.json",
+  "bronze_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\sttm\\sttm_bronze_20261113_071842_a5479121a134.csv",
+  "bronze_paths": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\bronze_layer\\sales_data_bronze_20261113_071842_a5479121a134.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\bronze_layer\\products_bronze_20261113_071842_a5479121a134.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\bronze_layer\\stores_bronze_20261113_071842_a5479121a134.parquet"
+  ],
+  "silver_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\sttm\\sttm_silver_20261113_071842_a5479121a134.csv",
+  "silver_paths": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\silver_layer\\sales_data_silver_20261113_071842_a5479121a134.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\silver_layer\\products_silver_20261113_071842_a5479121a134.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\silver_layer\\stores_silver_20261113_071842_a5479121a134.parquet"
+  ],
+  "gold_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\sttm\\sttm_gold_20261113_071842_a5479121a134.csv",
+  "gold_paths": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\data\\gold_layer\\revenue_gold_20261113_071842_a5479121a134.parquet"
+  ],
+  "report_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\completed\\reports\\report_20261113_071842_a5479121a134.html",
+  "status": "completed",
+  "execution_mode": "offline_review"
+}

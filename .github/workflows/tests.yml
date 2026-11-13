@@ -1,0 +1,39 @@
+name: Pipeline checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            executable: .venv/bin/python
+          - os: windows-latest
+            executable: .venv/Scripts/python.exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m venv .venv
+      - run: ${{ matrix.executable }} -m pip install -r requirements.txt
+      - run: ${{ matrix.executable }} -m pip check
+      - run: ${{ matrix.executable }} -m ruff check core agents tests cli.py
+      - run: ${{ matrix.executable }} -m pip_audit --disable-pip --no-deps -r requirements.txt
+      - run: ${{ matrix.executable }} -m pytest tests -q --cov=core --cov=agents --cov=cli --cov-branch --cov-report=term-missing --cov-report=json --cov-fail-under=80 --review-evidence "${{ runner.temp }}/review-evidence"
+      - name: Enforce per-file line coverage
+        run: >-
+          ${{ matrix.executable }} -c "import json, sys; data=json.load(open('coverage.json')); failed=[name for name, item in data['files'].items() if item['summary']['num_statements'] and item['summary']['covered_lines']/item['summary']['num_statements'] < 0.8]; print('Files below 80% line coverage:', failed); sys.exit(bool(failed))"
+      - name: Retain validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-review-${{ matrix.os }}
+          path: |
+            coverage.json
+            ${{ runner.temp }}/review-evidence

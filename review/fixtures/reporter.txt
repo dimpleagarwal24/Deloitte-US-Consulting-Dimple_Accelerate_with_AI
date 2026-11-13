@@ -1,0 +1,10 @@
+SQL:
+```sql
+SELECT category, total_revenue FROM revenue_gold ORDER BY total_revenue DESC
+```
+NARRATIVE:
+This is a hand-authored offline review response, not a live model result. The application computes the visible executive answer from executed query results.
+CHARTS:
+```json
+[{"type":"bar","x":"category","y":"total_revenue","title":"Net revenue by category"}]
+```

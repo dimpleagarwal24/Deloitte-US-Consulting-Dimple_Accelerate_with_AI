@@ -1,0 +1,177 @@
+{
+  "evidence_type": "automated_offline_review",
+  "run_id": "20261113_071903_db9d47cb51e5",
+  "status": "aborted",
+  "approval_method": "Scripted stdin after blocking assertions; NOT human sign-off or a live LLM run",
+  "api_calls": 0,
+  "gates": [
+    {
+      "layer": "bronze",
+      "blocked_before_input": true,
+      "downstream_absent_before_input": true,
+      "test_input": "y"
+    },
+    {
+      "layer": "silver",
+      "blocked_before_input": true,
+      "downstream_absent_before_input": true,
+      "test_input": "y"
+    },
+    {
+      "layer": "gold",
+      "blocked_before_input": true,
+      "downstream_absent_before_input": true,
+      "test_input": "n"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "audit_logs/20261113_071903_db9d47cb51e5.jsonl",
+      "sha256": "a7b3a45416687d3a8cfbc1a5415c29a57a29e8b1a555be0f573d77726316e874",
+      "bytes": 3591
+    },
+    {
+      "path": "data/bronze_layer/products_bronze_20261113_071903_db9d47cb51e5.parquet",
+      "sha256": "a602b8d376bab373bc4e7cb647d6094479488fd761c2af7a245aa89c952b78ed",
+      "bytes": 5511,
+      "rows": 20,
+      "columns": [
+        "product_id",
+        "product_name",
+        "category",
+        "standard_price",
+        "_load_timestamp",
+        "_source_file"
+      ]
+    },
+    {
+      "path": "data/bronze_layer/sales_data_bronze_20261113_071903_db9d47cb51e5.parquet",
+      "sha256": "5fa7cdf813fe64e3090c1bc8bf4ad8c4e09577748693698fe96bb8662e576786",
+      "bytes": 14574,
+      "rows": 186,
+      "columns": [
+        "transaction_id",
+        "transaction_date",
+        "store_id",
+        "product_id",
+        "product_name",
+        "category",
+        "quantity",
+        "unit_price",
+        "total_amount",
+        "customer_segment",
+        "payment_method",
+        "_load_timestamp",
+        "_source_file"
+      ]
+    },
+    {
+      "path": "data/bronze_layer/stores_bronze_20261113_071903_db9d47cb51e5.parquet",
+      "sha256": "93f4bce51b3094f6a9dcb2c532724f19a367825654d54473103f8dd3f5656a5a",
+      "bytes": 5576,
+      "rows": 10,
+      "columns": [
+        "store_id",
+        "store_name",
+        "region",
+        "city",
+        "state",
+        "_load_timestamp",
+        "_source_file"
+      ]
+    },
+    {
+      "path": "data/landing/20261113_071903_db9d47cb51e5/products.csv",
+      "sha256": "f69476094fe3706c704d11ea46678c101c284530e62b3dd5485223bc77984692",
+      "bytes": 799
+    },
+    {
+      "path": "data/landing/20261113_071903_db9d47cb51e5/sales_data.csv",
+      "sha256": "3e7ecf924c26878c4a0e424074702caecbfe5453a48e3572fa09b87720110732",
+      "bytes": 16344
+    },
+    {
+      "path": "data/landing/20261113_071903_db9d47cb51e5/stores.csv",
+      "sha256": "ef86916914d791c6732a82c7404042f909c4001af2bbf98273fcf3101035de2f",
+      "bytes": 444
+    },
+    {
+      "path": "data/profiles/profile_combined_20261113_071903_db9d47cb51e5.json",
+      "sha256": "a4e07698a3c53708695aa50b2d34b88cdcdcb13ddee8ada99a8267fe6971729d",
+      "bytes": 13272
+    },
+    {
+      "path": "data/silver_layer/products_silver_20261113_071903_db9d47cb51e5.parquet",
+      "sha256": "3250d9525e4ef4ca24efa192af0c80c3ef897c59e7df97c58f8ba79c4542e90e",
+      "bytes": 6545,
+      "rows": 20,
+      "columns": [
+        "pk_products_silver_id",
+        "product_id",
+        "product_name",
+        "category",
+        "standard_price",
+        "_load_timestamp",
+        "_source_file"
+      ]
+    },
+    {
+      "path": "data/silver_layer/sales_data_silver_20261113_071903_db9d47cb51e5.parquet",
+      "sha256": "a9e624f822f5799f3304dab33b102eac19eec889de6665bb2f084450b3d2ebbf",
+      "bytes": 16038,
+      "rows": 174,
+      "columns": [
+        "pk_sales_data_silver_id",
+        "transaction_id",
+        "transaction_date",
+        "store_id",
+        "product_id",
+        "product_name",
+        "category",
+        "quantity",
+        "unit_price",
+        "total_amount",
+        "customer_segment",
+        "payment_method",
+        "_load_timestamp",
+        "_source_file"
+      ]
+    },
+    {
+      "path": "data/silver_layer/stores_silver_20261113_071903_db9d47cb51e5.parquet",
+      "sha256": "19f359644a9ea0c4538da07f41a62a32ebad484d6838c2cb24d5697d2caf9470",
+      "bytes": 6541,
+      "rows": 10,
+      "columns": [
+        "pk_stores_silver_id",
+        "store_id",
+        "store_name",
+        "region",
+        "city",
+        "state",
+        "_load_timestamp",
+        "_source_file"
+      ]
+    },
+    {
+      "path": "data/sttm/sttm_bronze_20261113_071903_db9d47cb51e5.csv",
+      "sha256": "149ce5124262cba773c2cb88cdbc544be3bc52868f3134ca7cb8ae6ee29fb19f",
+      "bytes": 2156
+    },
+    {
+      "path": "data/sttm/sttm_gold_20261113_071903_db9d47cb51e5.csv",
+      "sha256": "e97b0f7434f7ee25cd4066ee2639e7fad5962403b83b0b4403cb76ffff8548fe",
+      "bytes": 312
+    },
+    {
+      "path": "data/sttm/sttm_silver_20261113_071903_db9d47cb51e5.csv",
+      "sha256": "3a8c32c2dba2cf69546981b91aefeeac5107f1382a59a0d71916b07516de0e8e",
+      "bytes": 2656
+    },
+    {
+      "path": "data/traces/state_20261113_071903_db9d47cb51e5.json",
+      "sha256": "58d4c9bcc7d34678bc081a8d0e137f448dac53ca46cbdeaf89c76301eff75e4c",
+      "bytes": 2614
+    }
+  ]
+}

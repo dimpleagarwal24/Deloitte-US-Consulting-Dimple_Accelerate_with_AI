@@ -1,0 +1,19 @@
+{
+  "run_id": "20261113_071851_038b424db44b",
+  "business_intent": "Which product category generated the highest net sales revenue?",
+  "input_files": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_bronze\\data\\landing\\20261113_071851_038b424db44b\\sales_data.csv",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_bronze\\data\\landing\\20261113_071851_038b424db44b\\products.csv",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_bronze\\data\\landing\\20261113_071851_038b424db44b\\stores.csv"
+  ],
+  "profile_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_bronze\\data\\profiles\\profile_combined_20261113_071851_038b424db44b.json",
+  "bronze_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_bronze\\data\\sttm\\sttm_bronze_20261113_071851_038b424db44b.csv",
+  "bronze_paths": [],
+  "silver_sttm_path": null,
+  "silver_paths": [],
+  "gold_sttm_path": null,
+  "gold_paths": [],
+  "report_path": null,
+  "status": "aborted",
+  "execution_mode": "offline_review"
+}

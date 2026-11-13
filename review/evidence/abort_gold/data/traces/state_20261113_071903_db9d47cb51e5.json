@@ -1,0 +1,27 @@
+{
+  "run_id": "20261113_071903_db9d47cb51e5",
+  "business_intent": "Which product category generated the highest net sales revenue?",
+  "input_files": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\landing\\20261113_071903_db9d47cb51e5\\sales_data.csv",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\landing\\20261113_071903_db9d47cb51e5\\products.csv",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\landing\\20261113_071903_db9d47cb51e5\\stores.csv"
+  ],
+  "profile_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\profiles\\profile_combined_20261113_071903_db9d47cb51e5.json",
+  "bronze_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\sttm\\sttm_bronze_20261113_071903_db9d47cb51e5.csv",
+  "bronze_paths": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\bronze_layer\\sales_data_bronze_20261113_071903_db9d47cb51e5.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\bronze_layer\\products_bronze_20261113_071903_db9d47cb51e5.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\bronze_layer\\stores_bronze_20261113_071903_db9d47cb51e5.parquet"
+  ],
+  "silver_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\sttm\\sttm_silver_20261113_071903_db9d47cb51e5.csv",
+  "silver_paths": [
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\silver_layer\\sales_data_silver_20261113_071903_db9d47cb51e5.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\silver_layer\\products_silver_20261113_071903_db9d47cb51e5.parquet",
+    "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\silver_layer\\stores_silver_20261113_071903_db9d47cb51e5.parquet"
+  ],
+  "gold_sttm_path": "C:\\src\\Accelerate with AI\\Oct_29th_2026_HYD\\medallion-pipeline\\review\\evidence\\abort_gold\\data\\sttm\\sttm_gold_20261113_071903_db9d47cb51e5.csv",
+  "gold_paths": [],
+  "report_path": null,
+  "status": "aborted",
+  "execution_mode": "offline_review"
+}

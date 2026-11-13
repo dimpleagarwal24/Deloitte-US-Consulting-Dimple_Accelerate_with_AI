@@ -1,0 +1,51 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Test and tool caches
+.pytest_cache/
+.coverage
+coverage.json
+coverage.xml
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Generated data (keep the folders, ignore the contents)
+data/landing/*
+data/bronze_layer/*
+data/silver_layer/*
+data/gold_layer/*
+data/profiles/*
+data/sttm/*
+data/traces/*
+!data/**/.gitkeep
+
+# Generated output
+reports/*
+audit_logs/*
+!reports/.gitkeep
+!audit_logs/.gitkeep
+
+# Vector store (ChromaDB)
+chroma_db/
+.chroma/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
